@@ -18,7 +18,15 @@ void UStorageComponent::BeginPlay()
 
 void UStorageComponent::AddItem(UItemInstance* ItemInstance)
 {
-	UE_LOG(LogStorageComponent, Display, TEXT("Item Added"));
 	Items.Add(ItemInstance);
+	UE_LOG(LogStorageComponent, Display, TEXT("Item Added"));
+	OnItemsChanged.Broadcast();
+}
+
+void UStorageComponent::RemoveItem(UItemInstance* ItemInstance)
+{
+	Items.Remove(ItemInstance);
+	UE_LOG(LogStorageComponent, Display, TEXT("Item Removed"));
+	OnItemsChanged.Broadcast();
 }
 
