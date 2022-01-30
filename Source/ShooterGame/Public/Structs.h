@@ -21,6 +21,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Image;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString ItemDescription; 
 };
 
 USTRUCT(BlueprintType)
