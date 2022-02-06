@@ -23,7 +23,15 @@ public:
 	UTexture2D* Image;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FString ItemDescription; 
+	FString ItemDescription;
+
+	/* Ширина в инвентаре */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Width;
+
+	/* Высота в инвентаре */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Height;
 };
 
 USTRUCT(BlueprintType)
