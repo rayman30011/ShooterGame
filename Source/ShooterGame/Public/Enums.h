@@ -10,3 +10,12 @@ enum class EItemType : uint8
 	Clothing UMETA(DisplayName = "Clothing"),
 	Food UMETA(DisplayName = "Clothing")
 };
+
+UENUM(BlueprintType)
+enum class EMenuState : uint8
+{
+	Auth = 0,
+	MainMenu = 1,
+	Player,
+	SelectingLevel
+};
