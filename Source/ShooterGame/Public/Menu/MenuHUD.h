@@ -20,19 +20,23 @@ protected:
 	virtual void BeginPlay() override;
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> AuthWidget;
+	TSubclassOf<UUserWidget> AuthWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> MainMenuWidget;
+	TSubclassOf<UUserWidget> MainMenuWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> PlayerWidget;
+	TSubclassOf<UUserWidget> PlayerWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> SelectingLevelWidget;
+	TSubclassOf<UUserWidget> SelectingLevelWidgetClass;
 
 	UFUNCTION(BlueprintCallable, Category = "Menu Functions")
 	void ChangeState(EMenuState NewState);
+
+private:
+	UFUNCTION()
+	void OnAuthorized();
 	
 private:
 	UPROPERTY();
@@ -42,4 +46,6 @@ private:
 	UUserWidget* CurrentWidget = nullptr;
 	
 	EMenuState CurrentState;
+
+	bool IsAuthorized = false;
 };

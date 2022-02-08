@@ -9,6 +9,8 @@
 
 #include "AuthWidget.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAuthorize);
+
 /**
  * 
  */
@@ -18,6 +20,9 @@ class SHOOTERGAME_API UAuthWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	UAuthWidget(const FObjectInitializer& ObjectInitializer);
+
+	FOnAuthorize OnAuthorize;
+	
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* SignButton;
@@ -27,6 +32,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* PasswordTextBox;
+
+	UPROPERTY(meta = (BindWidget))
+	class UCircularThrobber* InRequestIndicator;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsLoading = false;

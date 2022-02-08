@@ -4,14 +4,23 @@
 #include "Menu/MenuHUD.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Menu/AuthWidget.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogMenuHud, All, All);
 
 void AMenuHUD::BeginPlay()
 {
-	Widgets.Add(EMenuState::Auth, CreateWidget<UUserWidget>(GetWorld(), AuthWidget));
-	Widgets.Add(EMenuState::MainMenu, CreateWidget<UUserWidget>(GetWorld(), MainMenuWidget));
-	Widgets.Add(EMenuState::Player, CreateWidget<UUserWidget>(GetWorld(), PlayerWidget));
+	Widgets.Add(EMenuState::Auth, CreateWidget<UUserWidget>(GetWorld(), AuthWidgetClass));
+	Widgets.Add(EMenuState::MainMenu, CreateWidget<UUserWidget>(GetWorld(), MainMenuWidgetClass));
+	//Widgets.Add(EMenuState::Player, CreateWidget<UUserWidget>(GetWorld(), PlayerWidgetClass));
 
-	for (auto WidgetPair: Widgets)
+	UAuthWidget* AuthWidget = Cast<UAuthWidget>(Widgets[EMenuState::Auth]);
+	if (AuthWidget)
+	{
+		AuthWidget->OnAuthorize.AddDynamic(this, &AMenuHUD::OnAuthorized);
+	}
+
+	for (const auto WidgetPair: Widgets)
 	{
 		const auto Widget = WidgetPair.Value;
 		if (!Widget) continue;
@@ -19,10 +28,18 @@ void AMenuHUD::BeginPlay()
 		Widget->AddToViewport();
 		Widget->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	ChangeState(EMenuState::Auth);
 }
 
 void AMenuHUD::ChangeState(EMenuState State)
 {
+	if (!IsAuthorized && State != EMenuState::Auth)
+	{
+		UE_LOG(LogMenuHud, Warning, TEXT("Cand change state, Not authorized"));
+		return;
+	}
+	
 	if (CurrentWidget)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
@@ -34,3 +51,10 @@ void AMenuHUD::ChangeState(EMenuState State)
 		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
+
+void AMenuHUD::OnAuthorized()
+{
+	IsAuthorized = true;
+	ChangeState(EMenuState::MainMenu);
+}
+

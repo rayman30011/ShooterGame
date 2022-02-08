@@ -4,6 +4,7 @@
 #include "Menu/AuthWidget.h"
 
 #include "Components/Button.h"
+#include "Components/CircularThrobber.h"
 #include "Components/EditableTextBox.h"
 #include "Interfaces/IHttpResponse.h"
 
@@ -45,7 +46,7 @@ void UAuthWidget::OnSignButtonClicked()
 	Request->SetContentAsString(Content);
 	Request->OnProcessRequestComplete().BindUObject(this, &UAuthWidget::OnResponse);
 
-	IsLoading = true;
+	InRequestIndicator->SetVisibility(ESlateVisibility::Visible);
 	Request->ProcessRequest();
 }
 
@@ -63,10 +64,13 @@ void UAuthWidget::OnResponse(FHttpRequestPtr Request, FHttpResponsePtr Response,
 		{
 			const auto Token = JsonObject->GetStringField(TEXT("access_token"));
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, *Token);
+			OnAuthorize.Broadcast();
 		}
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, *ResponseBody);
 	}
+
+	InRequestIndicator->SetVisibility(ESlateVisibility::Visible);
 }
