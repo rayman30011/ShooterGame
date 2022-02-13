@@ -35,6 +35,30 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FStorage
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Height;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Width;
+};
+
+USTRUCT(BlueprintType)
+struct FStorageItem
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D Pos;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UItemInstance* Instance;
+};
+
+USTRUCT(BlueprintType)
 struct FWeaponItem : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -49,10 +73,16 @@ class UItemInstance : public UObject
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGuid Id;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FName ItemId;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EItemType ItemType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FString Data;
 };
 
 

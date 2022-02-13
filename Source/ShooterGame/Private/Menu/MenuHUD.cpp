@@ -3,6 +3,7 @@
 
 #include "Menu/MenuHUD.h"
 
+#include "ShooterGameInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "Menu/AuthWidget.h"
 
@@ -12,7 +13,7 @@ void AMenuHUD::BeginPlay()
 {
 	Widgets.Add(EMenuState::Auth, CreateWidget<UUserWidget>(GetWorld(), AuthWidgetClass));
 	Widgets.Add(EMenuState::MainMenu, CreateWidget<UUserWidget>(GetWorld(), MainMenuWidgetClass));
-	//Widgets.Add(EMenuState::Player, CreateWidget<UUserWidget>(GetWorld(), PlayerWidgetClass));
+	Widgets.Add(EMenuState::Player, CreateWidget<UUserWidget>(GetWorld(), PlayerWidgetClass));
 
 	UAuthWidget* AuthWidget = Cast<UAuthWidget>(Widgets[EMenuState::Auth]);
 	if (AuthWidget)

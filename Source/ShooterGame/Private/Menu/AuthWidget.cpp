@@ -3,10 +3,12 @@
 
 #include "Menu/AuthWidget.h"
 
+#include "ShooterGameInstance.h"
 #include "Components/Button.h"
 #include "Components/CircularThrobber.h"
 #include "Components/EditableTextBox.h"
 #include "Interfaces/IHttpResponse.h"
+#include "Menu/MenuGameMode.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogAuth, All, All);
 
@@ -63,7 +65,14 @@ void UAuthWidget::OnResponse(FHttpRequestPtr Request, FHttpResponsePtr Response,
 		if (FJsonSerializer::Deserialize(Reader, JsonObject))
 		{
 			const auto Token = JsonObject->GetStringField(TEXT("access_token"));
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, *Token);
+			UShooterGameInstance* GameInstance = Cast<UShooterGameInstance>(GetGameInstance());
+			//GameInstance->SetToken(Token);
+
+			const auto GameMode = Cast<AMenuGameMode>(GetWorld()->GetAuthGameMode());
+			if (GameMode)
+			{
+				GameMode->OnUserAuthorized.Broadcast();
+			}
 			OnAuthorize.Broadcast();
 		}
 	}
